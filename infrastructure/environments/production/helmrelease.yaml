@@ -103,11 +103,12 @@ spec:
       architecture: replication
       fullnameOverride: "super-todo-production-redis"
 
-    # PostgreSQL configuration for production
+    # PostgreSQL configuration for production - temporarily disabled
     cluster:
-      enabled: true
+      enabled: false
       name: super-todo-production-cluster
       instances: 3
+      externalClusters: []
       postgresql:
         parameters:
           max_connections: "200"
