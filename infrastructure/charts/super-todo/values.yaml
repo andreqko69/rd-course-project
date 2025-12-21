@@ -33,7 +33,7 @@ podSecurityContext:
 securityContext:
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: false
   runAsNonRoot: true
   runAsUser: 1000
@@ -86,6 +86,10 @@ env:
   NODE_ENV: production
   # Application port
   PORT: "3000"
+  # Redis configuration
+  REDIS_HOST: "super-todo-redis-master"
+  REDIS_PORT: "6379"
+  REDIS_URL: "redis://super-todo-redis-master:6379"
   # Add your custom environment variables here
   # Example:
   # API_URL: "https://api.example.com"
@@ -128,3 +132,15 @@ healthCheck:
     timeoutSeconds: 3
     successThreshold: 1
     failureThreshold: 3
+
+# Redis dependency configuration
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+  replica:
+    replicaCount: 0
+  architecture: standalone
