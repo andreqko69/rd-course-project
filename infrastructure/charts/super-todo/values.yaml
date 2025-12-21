@@ -152,7 +152,6 @@ cluster:
   enabled: true
   name: super-todo-cnpg-cluster
   instances: 1
-  externalClusters: []
   postgresql:
     parameters:
       max_connections: "100"
