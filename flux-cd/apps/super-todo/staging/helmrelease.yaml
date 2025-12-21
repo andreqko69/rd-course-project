@@ -5,13 +5,10 @@ metadata:
   namespace: staging
 spec:
   interval: 5m
-  chart:
-    spec:
-      chart: super-todo
-      sourceRef:
-        kind: HelmChart
-        name: super-todo
-        namespace: flux-system
+  chartRef:
+    kind: HelmChart
+    name: super-todo
+    namespace: flux-system
   values:
     replicaCount: 1
 
