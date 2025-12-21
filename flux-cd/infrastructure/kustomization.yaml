@@ -1,21 +1,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: flux-system
-
 resources:
-  # Deploy Helm repositories first
+  # Deploy Helm repositories first (these belong in flux-system)
   - postgres/helmrepository.yaml
   - redis/helmrepository.yaml
 
-  # Deploy Helm releases (which install the CRDs)
+  # Deploy Helm releases (which install the CRDs, these belong in flux-system)
   - postgres/production/helmrelease.yaml
   - postgres/staging/helmrelease.yaml
   - redis/production/helmrelease.yaml
   - redis/staging/helmrelease.yaml
 
   # Deploy Cluster resources after Helm releases have created the CRDs
+  # (these will use their declared namespaces: production, staging)
   - postgres/clusters/production.yaml
+  - redis/services/production.yaml
 
 commonAnnotations:
   deployment.type: infrastructure
