@@ -15,7 +15,9 @@ resources:
   # Deploy Cluster resources after Helm releases have created the CRDs
   # (these will use their declared namespaces: production, staging)
   - postgres/clusters/production.yaml
+  - postgres/clusters/staging.yaml
   - redis/services/production.yaml
+  - redis/services/staging.yaml
 
 commonAnnotations:
   deployment.type: infrastructure
