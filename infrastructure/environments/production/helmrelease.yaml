@@ -43,7 +43,8 @@ spec:
       REDIS_HOST: "super-todo-production-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-production-redis-master:6379"
-      # PostgreSQL configuration will be provided via secrets
+      # PostgreSQL configuration
+      DATABASE_URL: "postgresql://app:Xd4hdOTA1GEq9aUWG5jqOYA5rqk0Xnsku1DBlo8NJiye0GvkDvZMjwBMwlSry7Vk@super-todo-production-cluster-rw:5432/app"
 
     # Disable health checks for now since we don't have /health endpoint
     healthCheck:
@@ -104,20 +105,6 @@ spec:
       fullnameOverride: "super-todo-production-redis"
 
     # PostgreSQL configuration for production - temporarily disabled
+    # PostgreSQL configuration for production - disabled due to validation issues
     cluster:
       enabled: false
-      name: super-todo-production-cluster
-      instances: 3
-      externalClusters: []
-      postgresql:
-        parameters:
-          max_connections: "200"
-          shared_buffers: "256MB"
-          effective_cache_size: "1GB"
-      bootstrap:
-        initdb:
-          database: app
-          owner: app
-      storage:
-        size: 10Gi
-        storageClass: ""
