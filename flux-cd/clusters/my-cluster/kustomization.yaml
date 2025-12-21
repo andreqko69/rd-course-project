@@ -7,6 +7,10 @@ resources:
   # Namespaces MUST be created first
   - ../../namespaces
 
+  # RBAC resources
+  - ../../rbac/staging-rbac.yaml
+  - ../../rbac/production-rbac.yaml
+
   # Infrastructure - Repositories (these can be created anytime)
   - ../../infrastructure/postgres/helmrepository.yaml
   - ../../infrastructure/redis/helmrepository.yaml
