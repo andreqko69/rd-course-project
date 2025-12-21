@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: super-todo
@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: ./infrastructure/charts/super-todo
-      version: '*'
+      version: "*"
       sourceRef:
         kind: GitRepository
         name: flux-system
@@ -64,7 +64,7 @@ spec:
     securityContext:
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: false
       runAsNonRoot: true
       runAsUser: 1000
