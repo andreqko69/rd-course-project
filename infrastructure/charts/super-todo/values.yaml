@@ -139,10 +139,10 @@ redis:
   auth:
     enabled: false
   image:
-    tag: "latest"
+    tag: "7.4.1-debian-12-r0"
   master:
     persistence:
-      enabled: true
-      size: 1Gi
+      enabled: false
   replica:
     replicaCount: 0
+  architecture: standalone
