@@ -43,7 +43,6 @@ spec:
       REDIS_HOST: "super-todo-staging-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-staging-redis-master:6379"
-      # PostgreSQL configuration will be provided via secrets
 
     # Disable health checks for now since we don't have /health endpoint
     healthCheck:
@@ -94,6 +93,23 @@ spec:
       architecture: standalone
       fullnameOverride: "super-todo-staging-redis"
 
-    # PostgreSQL configuration removed - using external database
-    # cluster:
-    #   enabled: false
+    # PostgreSQL configuration for staging
+    cluster:
+      enabled: true
+      name: super-todo-staging-cluster
+      instances: 1
+      externalClusters: []
+
+      postgresql:
+        parameters:
+          max_connections: "50"
+          shared_buffers: "64MB"
+          effective_cache_size: "256MB"
+      bootstrap:
+        initdb:
+          database: app
+          owner: app
+
+      storage:
+        size: 1Gi
+        storageClass: ""
