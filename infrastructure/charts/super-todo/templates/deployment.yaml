@@ -39,7 +39,7 @@ spec:
               protocol: TCP
           env:
             {{- range $key, $value := .Values.env }}
-            {{- if ne $key "DATABASE_URL" }}
+            {{- if or (ne $key "DATABASE_URL") (not .Values.cluster.enabled) }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
