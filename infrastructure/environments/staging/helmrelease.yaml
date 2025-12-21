@@ -94,23 +94,6 @@ spec:
       architecture: standalone
       fullnameOverride: "super-todo-staging-redis"
 
-    # PostgreSQL configuration for staging - temporarily disabled
-    cluster:
-      enabled: false
-      name: super-todo-staging-cluster
-      instances: 1
-      externalClusters: []
-
-      postgresql:
-        parameters:
-          max_connections: "50"
-          shared_buffers: "64MB"
-          effective_cache_size: "256MB"
-      bootstrap:
-        initdb:
-          database: app
-          owner: app
-
-      storage:
-        size: 1Gi
-        storageClass: ""
+    # PostgreSQL configuration removed - using external database
+    # cluster:
+    #   enabled: false
