@@ -5,9 +5,5 @@ resources:
   - staging-namespace.yaml
   - production-namespace.yaml
 
-commonLabels:
-  app.kubernetes.io/part-of: super-todo
-  app.kubernetes.io/managed-by: flux
-
 commonAnnotations:
   deployment.type: namespace-management
