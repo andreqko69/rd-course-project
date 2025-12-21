@@ -5,9 +5,7 @@ namespace: flux-system
 
 resources:
   - postgres/helmrepository.yaml
-  - postgres/helmrelease.yaml
   - redis/helmrepository.yaml
-  - redis/helmrelease.yaml
 
 commonLabels:
   app.kubernetes.io/part-of: super-todo-infrastructure

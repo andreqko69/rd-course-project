@@ -4,28 +4,28 @@ metadata:
   name: flux-system
 
 resources:
-  # Namespaces
+  # Namespaces MUST be created first
   - ../../namespaces/kustomization.yaml
 
-  # Infrastructure - Repositories
+  # Infrastructure - Repositories (these can be created anytime)
   - ../../infrastructure/postgres/helmrepository.yaml
   - ../../infrastructure/redis/helmrepository.yaml
 
-  # Infrastructure - Staging
+  # Infrastructure - Staging (depends on staging namespace)
   - ../../infrastructure/postgres/staging/helmrelease.yaml
   - ../../infrastructure/redis/staging/helmrelease.yaml
 
-  # Infrastructure - Production
+  # Infrastructure - Production (depends on production namespace)
   - ../../infrastructure/postgres/production/helmrelease.yaml
   - ../../infrastructure/redis/production/helmrelease.yaml
 
   # Super-Todo Chart
   - super-todo-helmchart.yaml
 
-  # Applications - Staging
+  # Applications - Staging (depends on staging namespace and infrastructure)
   - ../../apps/super-todo/staging/helmrelease.yaml
 
-  # Applications - Production
+  # Applications - Production (depends on production namespace and infrastructure)
   - ../../apps/super-todo/production/helmrelease.yaml
 
 commonLabels:
