@@ -2,12 +2,9 @@ apiVersion: v2
 name: super-todo
 description: A Helm chart for super-todo NestJS application
 type: application
-version: 0.7.2
+version: 0.7.3
 appVersion: "0.0.1"
 dependencies:
   - name: redis
     version: 18.0.0
     repository: https://charts.bitnami.com/bitnami
-  - name: cluster
-    version: 0.5.0
-    repository: https://cloudnative-pg.github.io/charts
