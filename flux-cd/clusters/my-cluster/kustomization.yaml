@@ -28,10 +28,6 @@ resources:
   # Applications - Production (depends on production namespace and infrastructure)
   - ../../apps/super-todo/production/helmrelease.yaml
 
-commonLabels:
-  app.kubernetes.io/part-of: super-todo
-  app.kubernetes.io/managed-by: flux
-
 commonAnnotations:
   deployment.type: full-stack
   fluxcd.io/reconcile: enabled
