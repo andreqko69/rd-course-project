@@ -16,26 +16,33 @@ COPY tsconfig.json tsconfig.build.json nest-cli.json ./
 # Build the application
 RUN pnpm run build
 
-# Production stage
-FROM node:20-alpine
+# Runner stage - minimal Alpine image with non-root user
+FROM alpine:3.23.2 AS runner
+
+RUN adduser -D nodeuser
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
-
-# Install only production dependencies
-RUN npm install -g pnpm && pnpm install --prod --frozen-lockfile
+# Install Node.js runtime in Alpine
+RUN apk add --no-cache nodejs
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy node_modules from builder stage (pre-built)
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy package.json for reference
+COPY package.json .
+
+# Change ownership of app directory to non-root user
+RUN chown -R nodeuser:nodeuser /app
+
+# Switch to non-root user
+USER nodeuser
+
 # Expose port
 EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3000/todos', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
 # Start the application
 CMD ["node", "dist/main"]
