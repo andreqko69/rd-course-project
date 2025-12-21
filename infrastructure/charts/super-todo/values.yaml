@@ -138,6 +138,8 @@ redis:
   enabled: true
   auth:
     enabled: false
+  image:
+    tag: latest
   master:
     persistence:
       enabled: false
