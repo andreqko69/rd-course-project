@@ -5,7 +5,8 @@ metadata:
 
 resources:
   # Namespaces MUST be created first
-  - ../../namespaces/kustomization.yaml
+  - ../../namespaces/staging-namespace.yaml
+  - ../../namespaces/production-namespace.yaml
 
   # Infrastructure - Repositories (these can be created anytime)
   - ../../infrastructure/postgres/helmrepository.yaml
