@@ -2,5 +2,8 @@ dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 18.0.0
-digest: sha256:d27d59c2f47c2531625dd341c1e944b894c92fd46b667c6194f3a9eeb8b906e7
-generated: "2025-12-21T22:09:20.571317+02:00"
+- name: cluster
+  repository: https://cloudnative-pg.github.io/charts
+  version: 0.5.0
+digest: sha256:85ea1f697ccc7d5e56bf9c31e70dd65b79ee033782d804cfb9aedd33963c11c0
+generated: "2025-12-21T22:41:33.313461+02:00"

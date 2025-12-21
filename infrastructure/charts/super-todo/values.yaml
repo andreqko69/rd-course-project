@@ -90,6 +90,8 @@ env:
   REDIS_HOST: "super-todo-redis-master"
   REDIS_PORT: "6379"
   REDIS_URL: "redis://super-todo-redis-master:6379"
+  # PostgreSQL configuration
+  DATABASE_URL: "postgresql://app:LmkVVf8nXvsriqHSKyUwNhaWsnNL7OV83Npd4OhO6SLcuG4EJY9kg35jmQspgtvh@super-todo-cluster-rw:5432/app"
   # Add your custom environment variables here
   # Example:
   # API_URL: "https://api.example.com"
@@ -145,3 +147,23 @@ redis:
       enabled: false
   replica:
     replicaCount: 0
+
+# CloudNativePG dependency configuration
+cluster:
+  enabled: true
+  name: super-todo-cnpg-cluster
+  instances: 1
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "128MB"
+      effective_cache_size: "512MB"
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      secret:
+        name: super-todo-postgres-credentials
+  storage:
+    size: 1Gi
+    storageClass: ""

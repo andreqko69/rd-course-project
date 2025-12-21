@@ -42,13 +42,23 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-            {{- range .Values.envFromSecrets }}
+            {{- range $secret := .Values.envFromSecrets }}
             {{- range .keys }}
+            {{- if kindIs "map" . }}
+            {{- range $envName, $secretKey := . }}
+            - name: {{ $envName }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secret.secretName }}
+                  key: {{ $secretKey }}
+            {{- end }}
+            {{- else }}
             - name: {{ . }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ $.secretName }}
+                  name: {{ $secret.secretName }}
                   key: {{ . }}
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- range .Values.envFromConfigMaps }}
