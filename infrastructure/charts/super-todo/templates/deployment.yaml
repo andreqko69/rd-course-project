@@ -39,12 +39,10 @@ spec:
               protocol: TCP
           env:
             {{- range $key, $value := .Values.env }}
-            {{- if or (ne $key "DATABASE_URL") (not (and .Values.cluster .Values.cluster.enabled)) }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-            {{- end }}
-            {{- if and .Values.cluster .Values.cluster.enabled }}
+            {{- if and .Values.cluster .Values.cluster.enabled .Values.cluster.name }}
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
