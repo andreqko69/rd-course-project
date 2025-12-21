@@ -13,10 +13,11 @@ spec:
       {{- include "super-todo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "super-todo.selectorLabels" . | nindent 8 }}
     spec:
@@ -37,11 +38,10 @@ spec:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "super-todo.fullname" . }}-config
           env:
-            {{- range $key, $value := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-            {{- end }}
             {{- if and .Values.cluster .Values.cluster.enabled .Values.cluster.name }}
             - name: DATABASE_URL
               valueFrom:
