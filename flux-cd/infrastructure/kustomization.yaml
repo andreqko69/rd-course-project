@@ -7,9 +7,5 @@ resources:
   - postgres/helmrepository.yaml
   - redis/helmrepository.yaml
 
-commonLabels:
-  app.kubernetes.io/part-of: super-todo-infrastructure
-  app.kubernetes.io/managed-by: flux
-
 commonAnnotations:
   deployment.type: infrastructure
