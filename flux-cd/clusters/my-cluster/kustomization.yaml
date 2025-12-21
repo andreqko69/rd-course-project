@@ -9,8 +9,14 @@ resources:
   - ../../rbac/staging-rbac.yaml
   - ../../rbac/production-rbac.yaml
 
-  # Infrastructure - includes repositories, helm releases, and cluster resources
-  - ../../infrastructure
+  # Infrastructure - Helm repositories (these can be created anytime)
+  - ../../infrastructure/kustomization.yaml
+
+  # Infrastructure - Helm releases (these install the CRDs)
+  - infrastructure-helmreleases.yaml
+
+  # Infrastructure - Cluster resources (depends on CRDs from helm-releases)
+  - infrastructure-cluster-resources.yaml
 
   # Super-Todo Chart
   - super-todo-helmchart.yaml
