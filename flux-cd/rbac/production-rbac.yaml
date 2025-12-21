@@ -13,17 +13,16 @@ kind: Role
 metadata:
   name: super-todo
   namespace: production
-spec:
-  rules:
-    - apiGroups: [""]
-      resources: ["configmaps", "secrets"]
-      verbs: ["get", "list", "watch"]
-    - apiGroups: [""]
-      resources: ["pods", "pods/logs", "endpoints"]
-      verbs: ["get", "list", "watch"]
-    - apiGroups: [""]
-      resources: ["pods/portforward"]
-      verbs: ["create", "get", "list"]
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/logs", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/portforward"]
+    verbs: ["create", "get", "list"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
