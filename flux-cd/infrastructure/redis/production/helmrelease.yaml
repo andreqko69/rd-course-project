@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: redis-production
@@ -49,12 +49,12 @@ spec:
       enabled: true
       ingress:
         - from:
-          - podSelector:
-              matchLabels:
-                app: super-todo
-          - namespaceSelector:
-              matchLabels:
-                name: production
+            - podSelector:
+                matchLabels:
+                  app: super-todo
+            - namespaceSelector:
+                matchLabels:
+                  name: production
     podAntiAffinity: hard
     updateStrategy:
       type: RollingUpdate
