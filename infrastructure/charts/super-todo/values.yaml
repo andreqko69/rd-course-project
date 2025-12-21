@@ -139,11 +139,10 @@ redis:
   auth:
     enabled: false
   image:
-    repository: redis
     tag: "latest"
   master:
     persistence:
-      enabled: false
+      enabled: true
+      size: 1Gi
   replica:
     replicaCount: 0
-  architecture: standalone
