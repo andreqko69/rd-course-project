@@ -4,14 +4,6 @@ description: A Helm chart for super-todo NestJS application
 type: application
 version: 0.2.0
 appVersion: "0.0.1"
-keywords:
-  - todo
-  - nestjs
-  - nodejs
-home: https://github.com/your-org/super-todo
-maintainers:
-  - name: Your Name
-    email: your.email@example.com
 dependencies:
   - name: redis
     version: 18.0.0

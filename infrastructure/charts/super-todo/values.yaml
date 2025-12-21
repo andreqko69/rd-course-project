@@ -145,4 +145,3 @@ redis:
       enabled: false
   replica:
     replicaCount: 0
-  architecture: standalone
