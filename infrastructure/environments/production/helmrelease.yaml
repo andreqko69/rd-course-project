@@ -108,7 +108,6 @@ spec:
       enabled: true
       name: super-todo-production-cluster
       instances: 3
-      externalClusters: []
       postgresql:
         parameters:
           max_connections: "200"
