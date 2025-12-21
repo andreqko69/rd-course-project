@@ -9,4 +9,3 @@ data:
   {{- if or (ne $key "DATABASE_URL") (not $.Values.database.useClusterSecret) }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}
-  {{- end }}
