@@ -1,0 +1,104 @@
+# CloudNativePG PostgreSQL Cluster Values
+# Customize these values for your PostgreSQL deployment
+
+# Cluster Configuration
+cluster:
+  name: postgres
+  namespace: default
+  instances: 3
+
+# PostgreSQL Image
+image:
+  name: ghcr.io/cloudnative-pg/postgresql:16.1-1
+
+# Bootstrap Configuration
+bootstrap:
+  database: todos_db
+  owner: postgres
+  secretName: postgres-credentials
+
+# Storage Configuration
+storage:
+  size: 10Gi
+  storageClass: standard
+
+# PostgreSQL Parameters
+postgresql:
+  parameters:
+    max_connections: "200"
+    shared_buffers: "256MB"
+    effective_cache_size: "1GB"
+    maintenance_work_mem: "64MB"
+    checkpoint_completion_target: "0.9"
+    wal_buffers: "16MB"
+    default_statistics_target: "100"
+    random_page_cost: "1.1"
+    effective_io_concurrency: "200"
+    work_mem: "1310kB"
+    min_wal_size: "4GB"
+    max_wal_size: "16GB"
+    log_statement: "all"
+    log_duration: "off"
+    log_min_duration_statement: "1000"
+
+# Resource Requests and Limits
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+# Monitoring
+monitoring:
+  enabled: true
+
+# High Availability
+affinity:
+  podAntiAffinity: preferred
+
+# Backup Configuration (optional)
+backup:
+  enabled: false
+  # Uncomment and configure for S3 backups
+  # barmanObjectStore:
+  #   destinationPath: s3://my-bucket/postgres-backups
+  #   endpointURL: https://s3.amazonaws.com
+  #   s3Credentials:
+  #     accessKeyId:
+  #       name: s3-credentials
+  #       key: access-key
+  #     secretAccessKey:
+  #       name: s3-credentials
+  #       key: secret-key
+  #   wal:
+  #     maxParallel: 4
+
+# Credentials
+credentials:
+  username: postgres
+  password: changeme123secure
+
+# Connection Service
+service:
+  type: ClusterIP
+  port: 5432
+  annotations: {}
+
+# Labels and Annotations
+labels:
+  app: postgres
+  managed-by: flux
+
+annotations:
+  deployment.type: infrastructure
+
+# Advanced Settings
+logLevel: info
+slowQueryLog: false
+slowQueryThreshold: 1000
+connectionPooling:
+  enabled: false
+  # maxConnections: 100
+  # minConnections: 10

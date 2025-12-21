@@ -1,0 +1,129 @@
+# Bitnami Redis Cluster Values
+# Customize these values for your Redis Cluster deployment
+
+# Cluster Configuration
+clusterEnabled: true
+nodes: 6
+replicas: 1
+
+# Authentication
+auth:
+  enabled: true
+  password: "redis-secure-password-123"
+
+# Persistence
+persistence:
+  enabled: true
+  size: 8Gi
+  storageClass: standard
+  path: /bitnami/redis/data
+
+# Resource Requests and Limits
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Redis Configuration
+redis:
+  configuration: |
+    maxmemory 512mb
+    maxmemory-policy allkeys-lru
+    timeout 300
+    tcp-keepalive 60
+    appendonly yes
+    appendfsync everysec
+    save 900 1
+    save 300 10
+    save 60 10000
+
+# Metrics and Monitoring
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring
+    interval: 30s
+
+# Service Configuration
+service:
+  type: ClusterIP
+  port: 6379
+  clusterPort: 16379
+  annotations: {}
+
+# Node Selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Pod Annotations
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "6379"
+
+# Labels
+labels:
+  app: redis
+  managed-by: flux
+
+# Annotations
+annotations:
+  deployment.type: infrastructure
+
+# Network Policy
+networkPolicy:
+  enabled: false
+  # Uncomment to enable
+  # ingress:
+  #   - from:
+  #     - podSelector:
+  #         matchLabels:
+  #           app: super-todo
+
+# Update Strategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# Security Context
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+  runAsNonRoot: true
+
+# Pod Security Policy
+podSecurityPolicy:
+  enabled: false
+
+# Advanced Settings
+logLevel: notice
+databases: 16
+loglevel: notice
+slowlogMaxLen: 128
+slowlogThreshold: 10000
+
+# Connection Pooling
+connectionTimeout: 0
+tcp-keepalive: 300
+
+# AOF (Append Only File) Configuration
+appendOnly: yes
+appendFsync: everysec
+
+# RDB (Snapshot) Configuration
+rdbCompression: yes
+rdbChecksum: yes
+
+# Eviction Policy
+evictionPolicy: allkeys-lru
+
+# Memory Management
+maxMemoryPolicy: allkeys-lru
+maxmemory: "512mb"
