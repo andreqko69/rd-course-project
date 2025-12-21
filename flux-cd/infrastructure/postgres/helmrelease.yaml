@@ -18,9 +18,9 @@ spec:
       enabled: true
     podMonitorEnabled: true
   install:
-    crds: create
+    crds: Create
   upgrade:
-    crds: create
+    crds: Create
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster

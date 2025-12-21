@@ -43,9 +43,9 @@ spec:
         timeout 300
         tcp-keepalive 60
   install:
-    crds: create
+    crds: Create
   upgrade:
-    crds: create
+    crds: Create
 ---
 apiVersion: v1
 kind: Service
