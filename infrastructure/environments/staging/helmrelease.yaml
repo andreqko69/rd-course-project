@@ -1,0 +1,116 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: super-todo-staging
+  namespace: staging
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: ./infrastructure/charts/super-todo
+      version: '*'
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 15m
+  driftDetection:
+    mode: enabled
+  maxHistory: 3
+  install:
+    remediation:
+      retries: 3
+    createNamespace: true
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    # Staging-specific configuration
+    replicaCount: 1
+
+    image:
+      repository: andreqko/super-todo
+      tag: latest
+
+    # Environment variables
+    env:
+      NODE_ENV: staging
+      PORT: "3000"
+      # Redis configuration
+      REDIS_HOST: "super-todo-staging-redis-master"
+      REDIS_PORT: "6379"
+      REDIS_URL: "redis://super-todo-staging-redis-master:6379"
+      # PostgreSQL configuration
+      DATABASE_URL: "postgresql://app:LmkVVf8nXvsriqHSKyUwNhaWsnNL7OV83Npd4OhO6SLcuG4EJY9kg35jmQspgtvh@super-todo-staging-cluster-rw:5432/app"
+
+    # Disable health checks for now since we don't have /health endpoint
+    healthCheck:
+      enabled: false
+
+    # Staging resource limits (smaller)
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 128Mi
+
+    # Service configuration
+    service:
+      type: ClusterIP
+      port: 3000
+      targetPort: 3000
+
+    # Security context (matching your Dockerfile)
+    podSecurityContext:
+      fsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+
+    securityContext:
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: false
+      runAsNonRoot: true
+      runAsUser: 1000
+
+    # Redis configuration for staging
+    redis:
+      enabled: true
+      auth:
+        enabled: false
+      image:
+        repository: bitnami/redis
+        tag: "latest"
+      master:
+        persistence:
+          enabled: false
+      replica:
+        replicaCount: 0
+      architecture: standalone
+      fullnameOverride: "super-todo-staging-redis"
+
+    # PostgreSQL configuration for staging
+    cluster:
+      enabled: true
+      name: super-todo-staging-cluster
+      instances: 1
+      postgresql:
+        parameters:
+          max_connections: "50"
+          shared_buffers: "64MB"
+          effective_cache_size: "256MB"
+      bootstrap:
+        initdb:
+          database: app
+          owner: app
+          secret:
+            name: super-todo-staging-postgres-credentials
+      storage:
+        size: 1Gi
+        storageClass: ""
