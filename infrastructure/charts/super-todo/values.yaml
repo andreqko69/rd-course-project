@@ -90,11 +90,17 @@ env:
   REDIS_HOST: "super-todo-redis-master"
   REDIS_PORT: "6379"
   REDIS_URL: "redis://super-todo-redis-master:6379"
-  # PostgreSQL configuration will be provided via secrets
   # Add your custom environment variables here
   # Example:
   # API_URL: "https://api.example.com"
   # DEBUG: "false"
+
+# Database configuration
+database:
+  # Set to true to use CloudNativePG cluster secret for DATABASE_URL
+  useClusterSecret: false
+  # Name of the CloudNativePG cluster (without -app suffix)
+  secretName: ""
 
 # Environment variables from secrets
 envFromSecrets: []

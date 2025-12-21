@@ -43,8 +43,7 @@ spec:
       REDIS_HOST: "super-todo-production-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-production-redis-master:6379"
-      # PostgreSQL configuration - use existing cluster
-      DATABASE_URL: "postgresql://app:Ts9kKKzmkezlLT9vDOBKGsA14SlBBcTa6sPRcDTBe7rm79ZYP5NjuAabJDCFi9Rf@super-todo-production-cluster-rw.production:5432/app"
+      # PostgreSQL configuration will be provided via cluster secret
 
     # Disable health checks for now since we don't have /health endpoint
     healthCheck:
@@ -103,6 +102,11 @@ spec:
         replicaCount: 1
       architecture: replication
       fullnameOverride: "super-todo-production-redis"
+
+    # Database configuration - use CloudNativePG cluster secret
+    database:
+      useClusterSecret: true
+      secretName: "super-todo-production-cluster"
 
     # PostgreSQL configuration for production
     # Use existing cluster secrets but don't create new cluster via dependency

@@ -42,37 +42,12 @@ spec:
             - configMapRef:
                 name: {{ include "super-todo.fullname" . }}-config
           env:
-            {{- if and .Values.cluster .Values.cluster.enabled .Values.cluster.name }}
+            {{- if .Values.database.useClusterSecret }}
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
+                  name: {{ .Values.database.secretName }}-app
                   key: uri
-            - name: DATABASE_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: host
-            - name: DATABASE_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: port
-            - name: DATABASE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: username
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: password
-            - name: DATABASE_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: dbname
             {{- end }}
             {{- range $secret := .Values.envFromSecrets }}
             {{- range .keys }}
