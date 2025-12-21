@@ -44,7 +44,7 @@ spec:
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-production-redis-master:6379"
       # PostgreSQL configuration - use existing cluster
-      DATABASE_URL: "postgresql://app:YkcYfHmPSqDBKB6U8BA4NolCevEiuR4pyN7p5oFWLxOPV3iguZBzX4iAs3y2NnDj@super-todo-production-cluster-rw.production:5432/app"
+      DATABASE_URL: "postgresql://app:Ts9kKKzmkezlLT9vDOBKGsA14SlBBcTa6sPRcDTBe7rm79ZYP5NjuAabJDCFi9Rf@super-todo-production-cluster-rw.production:5432/app"
 
     # Disable health checks for now since we don't have /health endpoint
     healthCheck:

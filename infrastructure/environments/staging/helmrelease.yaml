@@ -43,8 +43,8 @@ spec:
       REDIS_HOST: "super-todo-staging-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-staging-redis-master:6379"
-      # PostgreSQL configuration - simple connection for staging
-      DATABASE_URL: "postgresql://postgres:password@postgres:5432/super_todo"
+      # PostgreSQL configuration - use staging cluster
+      DATABASE_URL: "postgresql://app:CBl0B7uiXhykXoT9dVmrBcGS4pBiS7pdHM95odsCNQ8TKk4jITOFloISQvZKs3nB@super-todo-staging-cluster-rw.staging:5432/app"
 
     # Disable health checks for now since we don't have /health endpoint
     healthCheck:
