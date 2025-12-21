@@ -139,6 +139,7 @@ redis:
   auth:
     enabled: false
   image:
+    repository: redis
     tag: "latest"
   master:
     persistence:
