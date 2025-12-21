@@ -6,7 +6,7 @@ metadata:
     {{- include "super-todo.labels" . | nindent 4 }}
 data:
   {{- range $key, $value := .Values.env }}
-  {{- if or (ne $key "DATABASE_URL") (not .Values.database.useClusterSecret) }}
+  {{- if or (ne $key "DATABASE_URL") (not $.Values.database.useClusterSecret) }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}
   {{- end }}
