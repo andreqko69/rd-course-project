@@ -1,0 +1,107 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: super-todo
+  namespace: staging
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: super-todo
+      sourceRef:
+        kind: HelmChart
+        name: super-todo
+        namespace: flux-system
+  values:
+    replicaCount: 1
+
+    image:
+      repository: andreqko/super-todo
+      pullPolicy: IfNotPresent
+      tag: "latest"
+
+    service:
+      type: ClusterIP
+      port: 80
+      targetPort: 3000
+
+    ingress:
+      enabled: true
+      className: "nginx"
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-staging"
+        nginx.ingress.kubernetes.io/rewrite-target: /
+      hosts:
+        - host: app.staging.local
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: super-todo-staging-tls
+          hosts:
+            - app.staging.local
+
+    resources:
+      requests: {}
+      limits: {}
+
+    autoscaling:
+      enabled: false
+
+    env:
+      - name: NODE_ENV
+        value: "staging"
+      - name: PORT
+        value: "3000"
+      - name: LOG_LEVEL
+        value: "debug"
+
+    secrets:
+      databaseUrl: "postgresql://postgres:staging-dev-password-123@postgres-staging.staging.svc.cluster.local:5432/todos_db_staging"
+      redisUrl: "redis://:staging-dev-redis-123@redis-staging.staging.svc.cluster.local:6379"
+
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "3000"
+
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+
+    livenessProbe:
+      httpGet:
+        path: /todos
+        port: http
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+    readinessProbe:
+      httpGet:
+        path: /todos
+        port: http
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 2
+
+    serviceAccount:
+      create: true
+      name: "super-todo"
+
+    volumeMounts:
+      - name: tmp
+        mountPath: /tmp
+
+    volumes:
+      - name: tmp
+        emptyDir: {}

@@ -1,0 +1,138 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: super-todo
+  namespace: production
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: super-todo
+      sourceRef:
+        kind: HelmChart
+        name: super-todo
+        namespace: flux-system
+  values:
+    replicaCount: 2
+
+    image:
+      repository: andreqko/super-todo
+      pullPolicy: IfNotPresent
+      tag: "latest"
+
+    service:
+      type: ClusterIP
+      port: 80
+      targetPort: 3000
+
+    ingress:
+      enabled: true
+      className: "nginx"
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        nginx.ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/rate-limit: "1000"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      hosts:
+        - host: app.staging
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: super-todo-prod-tls
+          hosts:
+            - app.staging
+
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+
+    env:
+      - name: NODE_ENV
+        value: "production"
+      - name: PORT
+        value: "3000"
+      - name: LOG_LEVEL
+        value: "warn"
+
+    secrets:
+      databaseUrl: "postgresql://postgres:production-secure-password-change-me-789@postgres-production.production.svc.cluster.local:5432/todos_db_production"
+      redisUrl: "redis://:production-secure-redis-password-change-me@redis-production.production.svc.cluster.local:6379"
+
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "3000"
+
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+
+    livenessProbe:
+      httpGet:
+        path: /todos
+        port: http
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+    readinessProbe:
+      httpGet:
+        path: /todos
+        port: http
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 2
+
+    serviceAccount:
+      create: true
+      name: "super-todo"
+
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - super-todo
+              topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: super-todo
+
+    volumeMounts:
+      - name: tmp
+        mountPath: /tmp
+
+    volumes:
+      - name: tmp
+        emptyDir: {}

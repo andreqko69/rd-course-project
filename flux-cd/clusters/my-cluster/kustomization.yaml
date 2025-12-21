@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Namespaces
+  - ../../namespaces/kustomization.yaml
+
+  # Infrastructure - Repositories
+  - ../../infrastructure/postgres/helmrepository.yaml
+  - ../../infrastructure/redis/helmrepository.yaml
+
+  # Infrastructure - Staging
+  - ../../infrastructure/postgres/staging/helmrelease.yaml
+  - ../../infrastructure/redis/staging/helmrelease.yaml
+
+  # Infrastructure - Production
+  - ../../infrastructure/postgres/production/helmrelease.yaml
+  - ../../infrastructure/redis/production/helmrelease.yaml
+
+  # Super-Todo Chart
+  - super-todo-helmchart.yaml
+
+  # Applications - Staging
+  - ../../apps/super-todo/staging/helmrelease.yaml
+
+  # Applications - Production
+  - ../../apps/super-todo/production/helmrelease.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: super-todo
+  app.kubernetes.io/managed-by: flux
+
+commonAnnotations:
+  deployment.type: full-stack
+  fluxcd.io/reconcile: enabled

@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - staging-namespace.yaml
+  - production-namespace.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: super-todo
+  app.kubernetes.io/managed-by: flux
+
+commonAnnotations:
+  deployment.type: namespace-management
