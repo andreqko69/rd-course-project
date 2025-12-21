@@ -1,0 +1,70 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: super-todo
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: ./infrastructure/charts/super-todo
+      version: '*'
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 15m
+  driftDetection:
+    mode: enabled
+  maxHistory: 3
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    image:
+      repository: andreqko/super-todo
+      tag: latest
+
+    # Environment variables
+    env:
+      NODE_ENV: production
+      PORT: "3000"
+
+    # Disable health checks for now since we don't have /health endpoint
+    healthCheck:
+      enabled: false
+
+    # Resource configuration
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+    # Service configuration
+    service:
+      type: ClusterIP
+      port: 3000
+      targetPort: 3000
+
+    # Security context (matching your Dockerfile)
+    podSecurityContext:
+      fsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+
+    securityContext:
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: false
+      runAsNonRoot: true
+      runAsUser: 1000

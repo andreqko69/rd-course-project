@@ -1,0 +1,6 @@
+apiVersion: v2
+name: super-todo
+description: A Helm chart for super-todo NestJS application
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
