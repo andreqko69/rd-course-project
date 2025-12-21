@@ -49,17 +49,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.cluster.name }}-app
-                  key: DATABASE_URL
+                  key: uri
             - name: DATABASE_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: host
+              value: {{ .Values.cluster.name }}-rw
             - name: DATABASE_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: port
+              value: "5432"
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
@@ -71,10 +65,7 @@ spec:
                   name: {{ .Values.cluster.name }}-app
                   key: password
             - name: DATABASE_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cluster.name }}-app
-                  key: dbname
+              value: {{ .Values.cluster.bootstrap.initdb.database }}
             {{- end }}
             {{- range $secret := .Values.envFromSecrets }}
             {{- range .keys }}

@@ -117,9 +117,6 @@ spec:
         initdb:
           database: app
           owner: app
-          secret:
-            name: super-todo-production-postgres-credentials
-            password: "LmkVVf8nXvsriqHSKyUwNhaWsnNL7OV83Npd4OhO6SLcuG4EJY9kg35jmQspgtvh"
       storage:
         size: 10Gi
         storageClass: ""
