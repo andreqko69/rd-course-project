@@ -9,17 +9,8 @@ resources:
   - ../../rbac/staging-rbac.yaml
   - ../../rbac/production-rbac.yaml
 
-  # Infrastructure - Repositories (these can be created anytime)
-  - ../../infrastructure/postgres/helmrepository.yaml
-  - ../../infrastructure/redis/helmrepository.yaml
-
-  # Infrastructure - Staging (depends on staging namespace)
-  - ../../infrastructure/postgres/staging/helmrelease.yaml
-  - ../../infrastructure/redis/staging/helmrelease.yaml
-
-  # Infrastructure - Production (depends on production namespace)
-  - ../../infrastructure/postgres/production/helmrelease.yaml
-  - ../../infrastructure/redis/production/helmrelease.yaml
+  # Infrastructure - includes repositories, helm releases, and cluster resources
+  - ../../infrastructure
 
   # Super-Todo Chart
   - super-todo-helmchart.yaml

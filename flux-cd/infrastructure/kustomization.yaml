@@ -4,8 +4,18 @@ kind: Kustomization
 namespace: flux-system
 
 resources:
+  # Deploy Helm repositories first
   - postgres/helmrepository.yaml
   - redis/helmrepository.yaml
+
+  # Deploy Helm releases (which install the CRDs)
+  - postgres/production/helmrelease.yaml
+  - postgres/staging/helmrelease.yaml
+  - redis/production/helmrelease.yaml
+  - redis/staging/helmrelease.yaml
+
+  # Deploy Cluster resources after Helm releases have created the CRDs
+  - postgres/clusters/production.yaml
 
 commonAnnotations:
   deployment.type: infrastructure
