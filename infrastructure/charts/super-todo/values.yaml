@@ -90,8 +90,7 @@ env:
   REDIS_HOST: "super-todo-redis-master"
   REDIS_PORT: "6379"
   REDIS_URL: "redis://super-todo-redis-master:6379"
-  # PostgreSQL configuration
-  DATABASE_URL: "postgresql://app:LmkVVf8nXvsriqHSKyUwNhaWsnNL7OV83Npd4OhO6SLcuG4EJY9kg35jmQspgtvh@super-todo-cluster-rw:5432/app"
+  # PostgreSQL configuration will be provided via secrets
   # Add your custom environment variables here
   # Example:
   # API_URL: "https://api.example.com"
@@ -164,6 +163,7 @@ cluster:
       owner: app
       secret:
         name: super-todo-postgres-credentials
+        password: "LmkVVf8nXvsriqHSKyUwNhaWsnNL7OV83Npd4OhO6SLcuG4EJY9kg35jmQspgtvh"
   storage:
     size: 1Gi
     storageClass: ""

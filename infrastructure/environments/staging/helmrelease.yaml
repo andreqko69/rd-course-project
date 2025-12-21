@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: ./infrastructure/charts/super-todo
-      version: '*'
+      version: "*"
       sourceRef:
         kind: GitRepository
         name: flux-system
@@ -43,8 +43,7 @@ spec:
       REDIS_HOST: "super-todo-staging-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-staging-redis-master:6379"
-      # PostgreSQL configuration
-      DATABASE_URL: "postgresql://app:LmkVVf8nXvsriqHSKyUwNhaWsnNL7OV83Npd4OhO6SLcuG4EJY9kg35jmQspgtvh@super-todo-staging-cluster-rw:5432/app"
+      # PostgreSQL configuration will be provided via secrets
 
     # Disable health checks for now since we don't have /health endpoint
     healthCheck:
@@ -74,7 +73,7 @@ spec:
     securityContext:
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: false
       runAsNonRoot: true
       runAsUser: 1000
@@ -111,6 +110,7 @@ spec:
           owner: app
           secret:
             name: super-todo-staging-postgres-credentials
+            password: "LmkVVf8nXvsriqHSKyUwNhaWsnNL7OV83Npd4OhO6SLcuG4EJY9kg35jmQspgtvh"
       storage:
         size: 1Gi
         storageClass: ""
