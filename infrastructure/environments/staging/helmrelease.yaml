@@ -111,6 +111,10 @@ spec:
       enabled: true
       name: super-todo-staging-cluster
       instances: 1
+      externalClusters:
+        - name: "please-ignore-me"
+          connectionParameters:
+            host: "localhost"
       postgresql:
         parameters:
           # Development/staging optimized settings

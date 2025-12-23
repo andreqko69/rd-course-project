@@ -126,6 +126,10 @@ spec:
       enabled: true
       name: super-todo-production-cluster
       instances: 3
+      externalClusters:
+        - name: "please-ignore-me"
+          connectionParameters:
+            host: "localhost"
       postgresql:
         parameters:
           # Production optimized settings
