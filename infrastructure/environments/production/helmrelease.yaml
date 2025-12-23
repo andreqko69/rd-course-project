@@ -108,6 +108,3 @@ spec:
     database:
       useClusterSecret: true
       secretName: "super-todo-production-cluster"
-
-    cluster:
-      enabled: false

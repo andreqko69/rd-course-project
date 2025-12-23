@@ -95,6 +95,3 @@ spec:
     database:
       useClusterSecret: true
       secretName: "super-todo-staging-cluster"
-
-    cluster:
-      enabled: false

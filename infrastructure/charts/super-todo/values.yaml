@@ -113,20 +113,3 @@ redis:
       enabled: false
   replica:
     replicaCount: 0
-
-cluster:
-  enabled: true
-  name: super-todo-cnpg-cluster
-  instances: 1
-  postgresql:
-    parameters:
-      max_connections: "100"
-      shared_buffers: "128MB"
-      effective_cache_size: "512MB"
-  bootstrap:
-    initdb:
-      database: app
-      owner: app
-  storage:
-    size: 1Gi
-    storageClass: ""
