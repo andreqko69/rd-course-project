@@ -28,28 +28,22 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    # Production-specific configuration - will be overridden by HPA
     replicaCount: 2
 
     image:
       repository: andreqko/super-todo
       tag: latest
 
-    # Environment variables
     env:
       NODE_ENV: production
       PORT: "3000"
-      # Redis configuration
       REDIS_HOST: "super-todo-production-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-production-redis-master:6379"
-      # PostgreSQL configuration will be provided via cluster secret
 
-    # Disable health checks for now since we don't have /health endpoint
     healthCheck:
       enabled: false
 
-    # Production resource limits
     resources:
       limits:
         cpu: 1000m
@@ -58,7 +52,6 @@ spec:
         cpu: 250m
         memory: 512Mi
 
-    # Ingress configuration for production
     ingress:
       enabled: true
       className: "traefik"
@@ -71,13 +64,11 @@ spec:
               pathType: Prefix
       tls: []
 
-    # Service configuration
     service:
       type: ClusterIP
       port: 3000
       targetPort: 3000
 
-    # Enable HPA for production (2-5 replicas)
     autoscaling:
       enabled: true
       minReplicas: 2
@@ -85,7 +76,6 @@ spec:
       targetCPUUtilizationPercentage: 70
       targetMemoryUtilizationPercentage: 80
 
-    # Security context (matching your Dockerfile)
     podSecurityContext:
       fsGroup: 1000
       runAsNonRoot: true
@@ -99,7 +89,6 @@ spec:
       runAsNonRoot: true
       runAsUser: 1000
 
-    # Redis configuration for production
     redis:
       enabled: true
       auth:
@@ -116,11 +105,9 @@ spec:
       architecture: replication
       fullnameOverride: "super-todo-production-redis"
 
-    # Database configuration - use CloudNativePG cluster secret
     database:
       useClusterSecret: true
       secretName: "super-todo-production-cluster"
 
-    # PostgreSQL cluster will be managed separately via cluster.yaml
     cluster:
       enabled: false

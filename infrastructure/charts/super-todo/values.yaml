@@ -10,12 +10,8 @@ nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ""
 
 podAnnotations: {}
@@ -42,17 +38,12 @@ ingress:
   enabled: false
   className: ""
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
   hosts:
     - host: super-todo.local
       paths:
         - path: /
           pathType: Prefix
   tls: []
-  #  - secretName: super-todo-tls
-  #    hosts:
-  #      - super-todo.local
 
 resources:
   limits:
@@ -67,7 +58,6 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 
@@ -75,43 +65,19 @@ tolerations: []
 
 affinity: {}
 
-# Environment variables for the application
 env:
-  # Node environment
   NODE_ENV: production
-  # Application port
   PORT: "3000"
-  # Redis configuration
   REDIS_HOST: "super-todo-redis-master"
   REDIS_PORT: "6379"
   REDIS_URL: "redis://super-todo-redis-master:6379"
-  # Add your custom environment variables here
-  # Example:
-  # API_URL: "https://api.example.com"
-  # DEBUG: "false"
 
-# Database configuration
 database:
-  # Set to true to use CloudNativePG cluster secret for DATABASE_URL
   useClusterSecret: false
-  # Name of the CloudNativePG cluster (without -app suffix)
   secretName: ""
-
-# Environment variables from secrets
 envFromSecrets: []
-# Example:
-# - secretName: super-todo-secrets
-#   keys:
-#     - DATABASE_PASSWORD
-#     - API_KEY
 
-# Environment variables from config maps
 envFromConfigMaps: []
-# Example:
-# - configMapName: super-todo-config
-#   keys:
-#     - DATABASE_HOST
-#     - REDIS_HOST
 
 # Health check configuration
 healthCheck:
@@ -148,7 +114,6 @@ redis:
   replica:
     replicaCount: 0
 
-# CloudNativePG dependency configuration
 cluster:
   enabled: true
   name: super-todo-cnpg-cluster
