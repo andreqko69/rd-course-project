@@ -31,18 +31,13 @@ spec:
     replicaCount: 2
 
     image:
-      repository: andreqko/super-todo
       tag: latest
 
     env:
       NODE_ENV: production
-      PORT: "3000"
       REDIS_HOST: "super-todo-production-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-production-redis-master:6379"
-
-    healthCheck:
-      enabled: false
 
     resources:
       limits:
@@ -53,21 +48,13 @@ spec:
         memory: 512Mi
 
     ingress:
-      enabled: true
       className: "traefik"
-      annotations:
-        kubernetes.io/ingress.class: traefik
       hosts:
         - host: app.local
           paths:
             - path: /
               pathType: Prefix
       tls: []
-
-    service:
-      type: ClusterIP
-      port: 3000
-      targetPort: 3000
 
     autoscaling:
       enabled: true
@@ -76,26 +63,7 @@ spec:
       targetCPUUtilizationPercentage: 70
       targetMemoryUtilizationPercentage: 80
 
-    podSecurityContext:
-      fsGroup: 1000
-      runAsNonRoot: true
-      runAsUser: 1000
-
-    securityContext:
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: false
-      runAsNonRoot: true
-      runAsUser: 1000
-
     redis:
-      enabled: true
-      auth:
-        enabled: false
-      image:
-        repository: bitnami/redis
-        tag: "latest"
       master:
         persistence:
           enabled: true
@@ -106,7 +74,6 @@ spec:
       fullnameOverride: "super-todo-production-redis"
 
     database:
-      useClusterSecret: true
       secretName: "super-todo-production-cluster"
 
     deploymentStrategy:

@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: super-todo
+  repository: andreqko/super-todo
   pullPolicy: IfNotPresent
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -35,8 +35,8 @@ service:
   targetPort: 3000
 
 ingress:
-  enabled: false
-  className: ""
+  enabled: true
+  className: "traefik"
   annotations: {}
   hosts:
     - host: super-todo.local
@@ -79,7 +79,7 @@ env:
   REDIS_URL: "redis://super-todo-redis-master:6379"
 
 database:
-  useClusterSecret: false
+  useClusterSecret: true
   secretName: ""
 envFromSecrets: []
 
@@ -87,7 +87,7 @@ envFromConfigMaps: []
 
 # Health check configuration
 healthCheck:
-  enabled: true
+  enabled: false
   livenessProbe:
     httpGet:
       path: /health
@@ -113,9 +113,11 @@ redis:
   auth:
     enabled: false
   image:
+    repository: bitnami/redis
     tag: "latest"
   master:
     persistence:
       enabled: false
   replica:
     replicaCount: 0
+  architecture: standalone

@@ -28,30 +28,19 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    replicaCount: 1
-
     image:
-      repository: andreqko/super-todo
       tag: latest
 
     env:
       NODE_ENV: staging
-      PORT: "3000"
-      # Redis configuration
       REDIS_HOST: "super-todo-staging-redis-master"
       REDIS_PORT: "6379"
       REDIS_URL: "redis://super-todo-staging-redis-master:6379"
 
-    healthCheck:
-      enabled: false
-
     resources: {}
 
     ingress:
-      enabled: true
       className: "traefik"
-      annotations:
-        kubernetes.io/ingress.class: traefik
       hosts:
         - host: app.staging.local
           paths:
@@ -59,41 +48,10 @@ spec:
               pathType: Prefix
       tls: []
 
-    service:
-      type: ClusterIP
-      port: 3000
-      targetPort: 3000
-
-    podSecurityContext:
-      fsGroup: 1000
-      runAsNonRoot: true
-      runAsUser: 1000
-
-    securityContext:
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: false
-      runAsNonRoot: true
-      runAsUser: 1000
-
     redis:
-      enabled: true
-      auth:
-        enabled: false
-      image:
-        repository: bitnami/redis
-        tag: "latest"
-      master:
-        persistence:
-          enabled: false
-      replica:
-        replicaCount: 0
-      architecture: standalone
       fullnameOverride: "super-todo-staging-redis"
 
     database:
-      useClusterSecret: true
       secretName: "super-todo-staging-cluster"
 
     deploymentStrategy:
