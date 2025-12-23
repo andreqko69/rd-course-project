@@ -126,6 +126,7 @@ spec:
       enabled: true
       name: super-todo-production-cluster
       instances: 3
+      externalClusters: []
       postgresql:
         parameters:
           # Production optimized settings

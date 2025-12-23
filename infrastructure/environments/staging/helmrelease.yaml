@@ -111,6 +111,7 @@ spec:
       enabled: true
       name: super-todo-staging-cluster
       instances: 1
+      externalClusters: []
       postgresql:
         parameters:
           # Development/staging optimized settings
