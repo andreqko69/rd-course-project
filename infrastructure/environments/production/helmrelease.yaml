@@ -28,8 +28,8 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    # Production-specific configuration
-    replicaCount: 3
+    # Production-specific configuration - will be overridden by HPA
+    replicaCount: 2
 
     image:
       repository: andreqko/super-todo
@@ -49,14 +49,27 @@ spec:
     healthCheck:
       enabled: false
 
-    # Production resource limits (larger)
+    # Production resource limits
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 1000m
+        memory: 1Gi
       requests:
-        cpu: 100m
-        memory: 256Mi
+        cpu: 250m
+        memory: 512Mi
+
+    # Ingress configuration for production
+    ingress:
+      enabled: true
+      className: "traefik"
+      annotations:
+        kubernetes.io/ingress.class: traefik
+      hosts:
+        - host: app.local
+          paths:
+            - path: /
+              pathType: Prefix
+      tls: []
 
     # Service configuration
     service:
@@ -64,10 +77,10 @@ spec:
       port: 3000
       targetPort: 3000
 
-    # Enable autoscaling for production
+    # Enable HPA for production (2-5 replicas)
     autoscaling:
       enabled: true
-      minReplicas: 3
+      minReplicas: 2
       maxReplicas: 5
       targetCPUUtilizationPercentage: 70
       targetMemoryUtilizationPercentage: 80
@@ -108,7 +121,44 @@ spec:
       useClusterSecret: true
       secretName: "super-todo-production-cluster"
 
-    # PostgreSQL configuration for production
-    # Use existing cluster secrets but don't create new cluster via dependency
+    # PostgreSQL configuration for production - production-like settings
     cluster:
-      enabled: false
+      enabled: true
+      name: super-todo-production-cluster
+      instances: 3
+      postgresql:
+        parameters:
+          # Production optimized settings
+          max_connections: "200"
+          shared_buffers: "256MB"
+          effective_cache_size: "1GB"
+          work_mem: "8MB"
+          maintenance_work_mem: "256MB"
+          checkpoint_completion_target: "0.9"
+          wal_buffers: "64MB"
+          default_statistics_target: "500"
+          random_page_cost: "1.1"
+          # Performance tuning
+          max_wal_size: "4GB"
+          min_wal_size: "1GB"
+          # Logging for production monitoring
+          log_min_duration_statement: "1000"
+          log_checkpoints: "on"
+          log_lock_waits: "on"
+      bootstrap:
+        initdb:
+          database: app
+          owner: app
+      storage:
+        size: 10Gi
+        storageClass: ""
+      # Enable monitoring for production
+      monitoring:
+        enabled: true
+        customQueriesConfigMap:
+          - key: queries
+            name: cnpg-default-monitoring
+      # High availability configuration
+      affinity:
+        podAntiAffinityType: required
+        topologyKey: kubernetes.io/hostname
