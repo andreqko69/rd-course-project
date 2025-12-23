@@ -108,3 +108,9 @@ spec:
     database:
       useClusterSecret: true
       secretName: "super-todo-production-cluster"
+
+    deploymentStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 0
