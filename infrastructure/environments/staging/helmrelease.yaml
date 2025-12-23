@@ -95,3 +95,6 @@ spec:
     database:
       useClusterSecret: true
       secretName: "super-todo-staging-cluster"
+
+    deploymentStrategy:
+      type: Recreate
