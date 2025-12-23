@@ -1,0 +1,84 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: super-todo-production-cluster
+  namespace: production
+  labels:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: super-todo-production
+    app.kubernetes.io/environment: production
+    app.kubernetes.io/part-of: super-todo
+spec:
+  # High availability with 3 instances
+  instances: 3
+
+  # PostgreSQL configuration optimized for production
+  postgresql:
+    parameters:
+      # Production optimized settings
+      max_connections: "200"
+      shared_buffers: "256MB"
+      effective_cache_size: "1GB"
+      work_mem: "8MB"
+      maintenance_work_mem: "256MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "64MB"
+      default_statistics_target: "500"
+      random_page_cost: "1.1"
+      # Performance tuning
+      max_wal_size: "4GB"
+      min_wal_size: "1GB"
+      # Logging for production monitoring
+      log_min_duration_statement: "1000"
+      log_checkpoints: "on"
+      log_lock_waits: "on"
+      log_statement: "ddl"
+      # Connection and timeout settings
+      idle_in_transaction_session_timeout: "30min"
+      statement_timeout: "30s"
+
+  # Bootstrap configuration
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      secret:
+        name: super-todo-production-cluster-app
+      dataChecksums: true
+
+  # Storage configuration for production
+  storage:
+    size: 10Gi
+    storageClass: ""
+
+  # Enable monitoring for production
+  monitoring:
+    enabled: true
+    customQueriesConfigMap:
+      - key: queries
+        name: cnpg-default-monitoring
+
+  # Production resources
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+
+  # High availability configuration
+  affinity:
+    podAntiAffinityType: required
+    topologyKey: kubernetes.io/hostname
+
+  # Backup disabled for local production environment
+  # backup:
+  #   retentionPolicy: "30d"
+
+  # Failover settings
+  failoverDelay: 0
+  switchoverDelay: 60
+
+  # Enable superuser access for administrative tasks
+  enableSuperuserAccess: true

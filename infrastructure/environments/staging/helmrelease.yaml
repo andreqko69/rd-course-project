@@ -106,34 +106,6 @@ spec:
       useClusterSecret: true
       secretName: "super-todo-staging-cluster"
 
-    # PostgreSQL configuration for staging - single instance, no replication
+    # PostgreSQL cluster will be managed separately via cluster.yaml
     cluster:
-      enabled: true
-      name: super-todo-staging-cluster
-      instances: 1
-      externalClusters:
-        - name: "please-ignore-me"
-          connectionParameters:
-            host: "localhost"
-      postgresql:
-        parameters:
-          # Development/staging optimized settings
-          max_connections: "50"
-          shared_buffers: "64MB"
-          effective_cache_size: "256MB"
-          work_mem: "4MB"
-          maintenance_work_mem: "64MB"
-          checkpoint_completion_target: "0.7"
-          wal_buffers: "16MB"
-          default_statistics_target: "100"
-          random_page_cost: "1.1"
-      bootstrap:
-        initdb:
-          database: app
-          owner: app
-      storage:
-        size: 2Gi
-        storageClass: ""
-      # Minimal monitoring for staging
-      monitoring:
-        enabled: false
+      enabled: false
